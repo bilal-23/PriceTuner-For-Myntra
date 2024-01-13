@@ -12,40 +12,28 @@ const manifest = {
    * if you want to support multiple languages, you can use the following reference
    * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization
    */
-  name: '__MSG_extensionName__',
+  name: 'PriceTune for Myntra',
   version: packageJson.version,
-  description: '__MSG_extensionDescription__',
-  permissions: ['storage', 'sidePanel'],
-  side_panel: {
-    default_path: 'src/pages/sidepanel/index.html',
-  },
-  options_page: 'src/pages/options/index.html',
-  background: {
-    service_worker: 'src/pages/background/index.js',
-    type: 'module',
-  },
+  description: `With 💸 PriceTune for Myntra 💰, you can set your own price range 📊💰, making it easier than ever to find fashion that fits both your style and your wallet.`,
+  permissions: ['storage'],
   action: {
     default_popup: 'src/pages/popup/index.html',
-    default_icon: 'icon-34.png',
-  },
-  chrome_url_overrides: {
-    newtab: 'src/pages/newtab/index.html',
+    default_icon: 'icon-32.png',
   },
   icons: {
     128: 'icon-128.png',
   },
   content_scripts: [
     {
-      matches: ['http://*/*', 'https://*/*', '<all_urls>'],
+      matches: ['https://www.myntra.com/*'],
       js: ['src/pages/content/index.js'],
       // KEY for cache invalidation
       css: ['assets/css/contentStyle<KEY>.chunk.css'],
     },
   ],
-  devtools_page: 'src/pages/devtools/index.html',
   web_accessible_resources: [
     {
-      resources: ['assets/js/*.js', 'assets/css/*.css', 'icon-128.png', 'icon-34.png'],
+      resources: ['assets/js/*.js', 'assets/css/*.css', 'icon-128.png', 'icon-32.png'],
       matches: ['*://*/*'],
     },
   ],

@@ -1,25 +1,44 @@
-import { createRoot } from 'react-dom/client';
 import App from '@pages/content/ui/app';
+import { createRoot } from 'react-dom/client';
 import refreshOnUpdate from 'virtual:reload-on-update-in-view';
 import injectedStyle from './injected.css?inline';
 
 refreshOnUpdate('pages/content');
 
-const root = document.createElement('div');
-root.id = 'chrome-extension-boilerplate-react-vite-content-view-root';
+function createReactRoot() {
+  const root = document.createElement('div');
+  root.id = 'price-filter';
 
-document.body.append(root);
+  const style = document.createElement('style');
+  style.innerHTML = injectedStyle;
+  document.head.appendChild(style);
 
-const rootIntoShadow = document.createElement('div');
-rootIntoShadow.id = 'shadow-root';
+  const reactApp = createRoot(root);
+  reactApp.render(<App />);
+  return root;
+}
 
-const shadowRoot = root.attachShadow({ mode: 'open' });
-shadowRoot.appendChild(rootIntoShadow);
+function renderReactApp() {
+  const observer = new MutationObserver((mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        const filtersHeaderDiv = document.querySelectorAll('.vertical-filters-header') as NodeListOf<HTMLDivElement>;
 
-/** Inject styles into shadow dom */
-const styleElement = document.createElement('style');
-styleElement.innerHTML = injectedStyle;
-shadowRoot.appendChild(styleElement);
+        const priceFilterDiv = Array.from(filtersHeaderDiv).find(
+          div => div.innerText.toLowerCase() === 'price',
+        ) as HTMLDivElement;
+
+        if (priceFilterDiv) {
+          const root = createReactRoot();
+          priceFilterDiv.nextSibling?.before(root);
+          observer.disconnect(); // Stop observing once the component is injected
+          break;
+        }
+      }
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+}
 
 /**
  * https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite/pull/174
@@ -28,4 +47,4 @@ shadowRoot.appendChild(styleElement);
  * Please refer to the PR link above and go back to the contentStyle.css implementation, or raise a PR if you have a better way to improve it.
  */
 
-createRoot(rootIntoShadow).render(<App />);
+renderReactApp();

@@ -1,10 +1,10 @@
 {
   "extensionDescription": {
-    "description": "Extension description",
-    "message": "Chrome extension boilerplate developed with Vite, React and Typescript"
+    "message": "Myntra Price Filter",
+    "description": "Filter to set custom price range on Myntra.com"
   },
   "extensionName": {
-    "description": "Extension name",
-    "message": "Chrome extension boilerplate"
+    "message": "Myntra Price Filter",
+    "description": "Filter to set custom price range on Myntra.com"
   }
 }
